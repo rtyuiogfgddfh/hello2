@@ -1,0 +1,27 @@
+name: Create Pull Request
+
+on:
+  push:
+    branches:
+      - main  # Define the branch you want to trigger this workflow on
+
+jobs:
+  create-pull-request:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Create Pull Request
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.MY_GH_TOKEN }}
+          script: |
+            github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'My PR from GitHub Actions',
+              body: 'This is a PR created by a workflow',
+              head: 'my-feature-branch',  # Replace with your branch name
+              base: 'main'  # Replace with your base branch name
+            })
